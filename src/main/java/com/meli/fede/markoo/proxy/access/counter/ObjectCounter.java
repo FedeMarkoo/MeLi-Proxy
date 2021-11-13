@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.access.counter;
+package com.meli.fede.markoo.proxy.access.counter;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-class ObjectCounter {
+public class ObjectCounter {
     private String ip;
     private String path;
 }

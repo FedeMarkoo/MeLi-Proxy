@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.access.manager;
+package com.meli.fede.markoo.proxy.access.manager;
 
 import lombok.Getter;
 import lombok.Setter;

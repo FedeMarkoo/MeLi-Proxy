@@ -1,0 +1,25 @@
+springdoc:
+  api-docs:
+    path: /docs
+  swagger-ui:
+    path: /docs/swagger-ui.html
+
+com:
+  meli:
+    fede:
+      markoo:
+        proxy:
+          baseurl: api.mercadolibre.com
+          maxvalues:
+            maxRequestPerCombo: '10'
+            maxRequestPerPath: '10'
+            maxRequestPerIp: '10'
+        subtract:
+          cron: 0 0/1 * * * ?
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  cloud:
+    discovery:
+      enabled: true

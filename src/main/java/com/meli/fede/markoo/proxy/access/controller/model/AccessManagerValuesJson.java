@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.access.controller.model;
+package com.meli.fede.markoo.proxy.access.controller.model;
 
 
 import lombok.Getter;

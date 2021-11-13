@@ -1,7 +1,7 @@
 package com.meli.fede.markoo.proxy.service;
 
-import com.meli.fede.markoo.access.controller.model.AccessManagerValuesJson;
-import com.meli.fede.markoo.access.manager.AccessManagerValues;
+import com.meli.fede.markoo.proxy.access.controller.model.AccessManagerValuesJson;
+import com.meli.fede.markoo.proxy.access.manager.AccessManagerValues;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;

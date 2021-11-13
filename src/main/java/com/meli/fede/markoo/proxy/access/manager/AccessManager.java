@@ -1,6 +1,6 @@
-package com.meli.fede.markoo.access.manager;
+package com.meli.fede.markoo.proxy.access.manager;
 
-import com.meli.fede.markoo.access.counter.AccessCounter;
+import com.meli.fede.markoo.proxy.access.counter.AccessCounter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,22 +18,20 @@ public class AccessManager {
     private final Map<String, Integer> ipMap = new ConcurrentHashMap<>();
     private final Map<String, Integer> pathMap = new ConcurrentHashMap<>();
     private final Map<String, Integer> comboMap = new ConcurrentHashMap<>();
+    private final Map<String, Integer> sisOpMap = new ConcurrentHashMap<>();
 
     private final AccessManagerValues accessManagerValues;
     private final AccessCounter accessCounter;
 
     @Scheduled(cron = "${com.meli.fede.markoo.subtract.cron}")
     private void scheduleTaskUsingCronExpression() {
-        this.ipMap.keySet().forEach(k -> this.ipMap.compute(k, SUBTRACT));
-        this.pathMap.keySet().forEach(k -> this.pathMap.compute(k, SUBTRACT));
-        this.comboMap.keySet().forEach(k -> this.comboMap.compute(k, SUBTRACT));
+        this.ipMap.clear();
+        this.pathMap.clear();
+        this.comboMap.clear();
     }
 
     public boolean validateAccess(final HttpServletRequest request) {
         final String path = request.getServletPath();
-        if ("/accessControllerValues".equals(path)) {
-            return true;
-        }
         final String ip = request.getRemoteHost();
         final boolean access = this.validateIp(ip) && this.validatePath(path) && this.validateCombo(ip, path);
         if (access) {

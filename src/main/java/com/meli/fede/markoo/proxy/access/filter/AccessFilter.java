@@ -1,12 +1,10 @@
-package com.meli.fede.markoo.access.filter;
+package com.meli.fede.markoo.proxy.access.filter;
 
-import com.meli.fede.markoo.access.manager.AccessManager;
+import com.meli.fede.markoo.proxy.access.manager.AccessManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
@@ -17,10 +15,6 @@ public class AccessFilter implements Filter {
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain filterChain) throws IOException, ServletException {
-        if (this.accessManager.validateAccess((HttpServletRequest) request)) {
-            filterChain.doFilter(request, response);
-        } else {
-            ((HttpServletResponse) response).setStatus(429);
-        }
+        filterChain.doFilter(request, response);
     }
 }
