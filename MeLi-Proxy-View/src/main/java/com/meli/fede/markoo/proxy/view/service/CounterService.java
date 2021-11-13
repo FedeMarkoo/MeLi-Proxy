@@ -1,7 +1,7 @@
-package com.meli.fede.markoo.proxy.access.counter.service;
+package com.meli.fede.markoo.proxy.view.service;
 
-import com.meli.fede.markoo.proxy.access.counter.AccessCounter;
-import com.meli.fede.markoo.proxy.access.counter.ObjectCounter;
+import com.meli.fede.markoo.proxy.view.AccessCounter;
+import com.meli.fede.markoo.proxy.view.ObjectCounter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

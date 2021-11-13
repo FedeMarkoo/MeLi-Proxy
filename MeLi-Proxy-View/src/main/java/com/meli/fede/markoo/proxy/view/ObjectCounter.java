@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.proxy.access.counter;
+package com.meli.fede.markoo.proxy.view;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

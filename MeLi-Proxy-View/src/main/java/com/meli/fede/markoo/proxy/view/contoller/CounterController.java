@@ -1,6 +1,6 @@
-package com.meli.fede.markoo.proxy.access.counter.contoller;
+package com.meli.fede.markoo.proxy.view.contoller;
 
-import com.meli.fede.markoo.proxy.access.counter.service.CounterService;
+import com.meli.fede.markoo.proxy.view.service.CounterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
