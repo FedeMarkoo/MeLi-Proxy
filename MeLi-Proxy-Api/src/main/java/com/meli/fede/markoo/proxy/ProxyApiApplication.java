@@ -15,10 +15,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @EnableScheduling
 @SpringBootApplication
-public class ProxyApplication {
+public class ProxyApiApplication {
 
     public static void main(final String[] args) {
-        SpringApplication.run(ProxyApplication.class, args);
+        SpringApplication.run(ProxyApiApplication.class, args);
     }
 
 }
