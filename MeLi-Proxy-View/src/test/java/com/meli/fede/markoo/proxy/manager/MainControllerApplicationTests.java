@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.proxy;
+package com.meli.fede.markoo.proxy.manager;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
