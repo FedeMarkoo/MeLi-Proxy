@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.proxy.data.mongo.model;
+package com.meli.fede.markoo.proxy.api.data.model;
 
 import lombok.Builder;
 import lombok.Data;

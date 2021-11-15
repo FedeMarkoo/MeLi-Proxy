@@ -1,16 +1,16 @@
-package com.meli.fede.markoo.proxy.access.manager;
+package com.meli.fede.markoo.proxy.api.service;
 
-import com.meli.fede.markoo.proxy.access.counter.AccessCounter;
-import com.meli.fede.markoo.proxy.data.redis.repository.RedisRepository;
+import com.meli.fede.markoo.proxy.api.data.repository.RedisRepository;
+import com.meli.fede.markoo.proxy.api.values.AccessManagerValues;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AccessManager {
+public class AccessService {
 
     private final AccessManagerValues accessManagerValues;
-    private final AccessCounter accessCounter;
+    private final MetricsService metricsService;
     private final RedisRepository redisRepository;
 
     public boolean validateAccess(final String servletPath, final String host, final String userAgent) {
@@ -20,7 +20,7 @@ public class AccessManager {
                 && this.validateUserAgent(userAgent)
                 && !this.isIpInBlacklist(host)
                 && !this.isUserAgentInBlacklist(userAgent);
-        this.accessCounter.incrementMetrics(host, servletPath, userAgent, !access);
+        this.metricsService.incrementMetrics(host, servletPath, userAgent, !access);
         return access;
     }
 

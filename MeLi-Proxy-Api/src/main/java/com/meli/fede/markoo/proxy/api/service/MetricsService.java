@@ -1,7 +1,8 @@
-package com.meli.fede.markoo.proxy.access.counter;
+package com.meli.fede.markoo.proxy.api.service;
 
-import com.meli.fede.markoo.proxy.data.mongo.model.RequestData;
-import com.meli.fede.markoo.proxy.data.mongo.repository.MongoRepository;
+
+import com.meli.fede.markoo.proxy.api.data.model.RequestData;
+import com.meli.fede.markoo.proxy.api.data.repository.MongoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.scheduling.annotation.Async;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AccessCounter {
+public class MetricsService {
     private final MongoRepository repository;
 
     @SneakyThrows
