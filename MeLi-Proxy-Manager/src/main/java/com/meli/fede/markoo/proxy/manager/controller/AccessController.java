@@ -1,7 +1,7 @@
-package com.meli.fede.markoo.proxy.access.controller;
+package com.meli.fede.markoo.proxy.manager.controller;
 
-import com.meli.fede.markoo.proxy.access.controller.model.AccessManagerValuesJson;
-import com.meli.fede.markoo.proxy.service.ProxyService;
+import com.meli.fede.markoo.proxy.manager.service.ProxyService;
+import com.meli.fede.markoo.proxy.manager.values.AccessManagerValues;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +18,13 @@ public class AccessController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void accessControllerValues(@RequestBody @Valid final AccessManagerValuesJson request) {
+    public void accessControllerValues(@RequestBody @Valid final AccessManagerValues request) {
         this.proxyService.setAccessManagerValues(request);
     }
 
     @GetMapping
-    public ResponseEntity<AccessManagerValuesJson> accessControllerValues() {
+    public ResponseEntity<AccessManagerValues> accessControllerValues() {
         return ResponseEntity.ok(this.proxyService.getAccessManagerValues());
     }
 
-    @RequestMapping
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public void accessControllerValuesNotImpl() {
-    }
 }

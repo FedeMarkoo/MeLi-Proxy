@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.proxy.beans;
+package com.meli.fede.markoo.proxy.manager.beans;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
-package com.meli.fede.markoo.proxy.access.service;
+package com.meli.fede.markoo.proxy.manager.service;
 
-import com.meli.fede.markoo.proxy.data.redis.repository.RedisRepository;
+import com.meli.fede.markoo.proxy.manager.data.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

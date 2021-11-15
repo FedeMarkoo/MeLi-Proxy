@@ -1,6 +1,6 @@
-package com.meli.fede.markoo.proxy.access.controller;
+package com.meli.fede.markoo.proxy.manager.controller;
 
-import com.meli.fede.markoo.proxy.access.service.BlacklistService;
+import com.meli.fede.markoo.proxy.manager.service.BlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,11 +38,6 @@ public class BlacklistController {
         return ResponseEntity.ok(this.service.isBlackHost(host));
     }
 
-    @RequestMapping("/ip/*")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public void ipNotImpl() {
-    }
-
     @PutMapping("/userAgent/{userAgent}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addBlackUserAgent(@PathVariable final String userAgent) {
@@ -63,10 +58,5 @@ public class BlacklistController {
     @GetMapping("/userAgent/{userAgent}")
     public ResponseEntity<Boolean> isBlackUserAgent(@PathVariable final String userAgent) {
         return ResponseEntity.ok(this.service.isBlackUserAgent(userAgent));
-    }
-
-    @RequestMapping("/userAgent/*")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public void userAgentNotImpl() {
     }
 }

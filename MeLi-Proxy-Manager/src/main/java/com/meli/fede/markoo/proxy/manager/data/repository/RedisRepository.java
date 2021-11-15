@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.proxy.data.redis.repository;
+package com.meli.fede.markoo.proxy.manager.data.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -8,9 +8,9 @@
         <version>2.5.6</version>
     </parent>
     <groupId>com.meli.fede.markoo</groupId>
-    <artifactId>meli-proxy-api</artifactId>
+    <artifactId>meli-proxy-manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>MeLi Proxy Api</name>
+    <name>MeLi Proxy Manager</name>
 
     <description>
         Mercadolibre hoy en día correr sus aplicaciones en más de 20000 servidores, estos suelen comunicarse

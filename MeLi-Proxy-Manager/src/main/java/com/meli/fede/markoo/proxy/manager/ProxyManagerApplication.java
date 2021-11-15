@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.proxy;
+package com.meli.fede.markoo.proxy.manager;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -15,10 +15,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @EnableRedisRepositories
 @SpringBootApplication
-public class ProxyApiApplication {
+public class ProxyManagerApplication {
 
     public static void main(final String[] args) {
-        SpringApplication.run(ProxyApiApplication.class, args);
+        SpringApplication.run(ProxyManagerApplication.class, args);
     }
 
 }

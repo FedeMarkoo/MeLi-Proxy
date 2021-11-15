@@ -22,8 +22,3 @@ spring:
   cache:
     redis:
       time-to-live: 5
-  data:
-    mongodb:
-      database: MeLi-Proxy
-#      uri: mongodb+srv://meli:meli@cluster0.2ynos.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
