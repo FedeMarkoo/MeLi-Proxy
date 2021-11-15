@@ -21,4 +21,8 @@ public class AccessManagerValues {
     @NonNull
     @Value("${com.meli.fede.markoo.proxy.maxvalues.maxRequestPerPath}")
     public Integer maxRequestPerPath;
+
+    @NonNull
+    @Value("${com.meli.fede.markoo.proxy.maxvalues.maxRequestPerPath}")
+    public Integer maxRequestPerUserAgent;
 }

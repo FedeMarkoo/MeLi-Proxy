@@ -10,6 +10,7 @@
     <groupId>com.meli.fede.markoo</groupId>
     <artifactId>meli-proxy</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>MeLi Proxy</name>
 
     <description>
@@ -22,6 +23,6 @@
         <module>MeLi-Proxy-Api</module>
         <module>MeLi-Proxy-View</module>
     </modules>
-	
+
 
 </project>

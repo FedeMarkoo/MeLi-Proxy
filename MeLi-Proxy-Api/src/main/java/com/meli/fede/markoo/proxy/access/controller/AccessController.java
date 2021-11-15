@@ -10,23 +10,24 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/accessControllerValues")
 @RequiredArgsConstructor
 public class AccessController {
 
     private final ProxyService proxyService;
 
-    @PostMapping("/accessControllerValues")
+    @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void accessControllerValues(@RequestBody @Valid final AccessManagerValuesJson request) {
         this.proxyService.setAccessManagerValues(request);
     }
 
-    @GetMapping("/accessControllerValues")
+    @GetMapping
     public ResponseEntity<AccessManagerValuesJson> accessControllerValues() {
         return ResponseEntity.ok(this.proxyService.getAccessManagerValues());
     }
 
-    @RequestMapping("/accessControllerValues")
+    @RequestMapping
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     public void accessControllerValuesNotImpl() {
     }

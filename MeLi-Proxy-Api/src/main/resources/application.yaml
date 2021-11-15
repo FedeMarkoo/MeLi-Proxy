@@ -4,22 +4,26 @@ springdoc:
   swagger-ui:
     path: /docs/swagger-ui.html
 
-com:
-  meli:
-    fede:
-      markoo:
-        proxy:
-          baseurl: api.mercadolibre.com
-          maxvalues:
-            maxRequestPerCombo: '10'
-            maxRequestPerPath: '10'
-            maxRequestPerIp: '10'
-        subtract:
-          cron: 0 0/1 * * * ?
+com.meli.fede.markoo:
+  proxy:
+    baseurl: api.mercadolibre.com
+    maxvalues:
+      maxRequestPerCombo: 20
+      maxRequestPerPath: 20
+      maxRequestPerIp: 20
+
 spring:
   redis:
-    host: 127.0.0.1
+    host: localhost
     port: 6379
   cloud:
     discovery:
       enabled: true
+  cache:
+    redis:
+      time-to-live: 5
+  data:
+    mongodb:
+      database: MeLi-Proxy
+#      uri: mongodb+srv://meli:meli@cluster0.2ynos.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+

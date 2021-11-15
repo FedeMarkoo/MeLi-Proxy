@@ -7,12 +7,11 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,9 +21,9 @@ import reactor.netty.http.client.HttpClient;
 import javax.net.ssl.SSLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 
-@Order(Ordered.LOWEST_PRECEDENCE)
 @RestController
 @RequiredArgsConstructor
 public class MainController {
@@ -44,20 +43,19 @@ public class MainController {
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .baseUrl(url)
                 .build();
-
     }
 
     @RequestMapping(path = "/**")
     public Object redirect(final HttpServletRequest request
             , final HttpServletResponse response
             , final HttpMethod httpMethod
-            , @RequestBody(required = false) final Object body) {
-        if (this.accessManager.validateAccess(request)) {
+            , @RequestHeader(value = "User-Agent") final String userAgent
+            , @RequestHeader(value = "Host") final String host
+            , @RequestBody(required = false) final Optional<Object> body) {
+        if (this.accessManager.validateAccess(request.getServletPath(), host, userAgent)) {
             final String path = request.getServletPath();
             final WebClient.RequestBodyUriSpec spec = this.localApiClient.method(httpMethod);
-            if (body != null) {
-                spec.bodyValue(body);
-            }
+            body.ifPresent(spec::bodyValue);
             return spec.uri(path)
                     .retrieve()
                     .onStatus(HttpStatus::isError, cr -> {
