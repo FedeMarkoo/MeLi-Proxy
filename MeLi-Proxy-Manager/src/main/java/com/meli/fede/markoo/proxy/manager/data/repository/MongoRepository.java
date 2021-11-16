@@ -1,6 +1,6 @@
-package com.meli.fede.markoo.proxy.view.data.repository;
+package com.meli.fede.markoo.proxy.manager.data.repository;
 
-import com.meli.fede.markoo.proxy.view.data.model.RequestData;
+import com.meli.fede.markoo.proxy.manager.data.model.RequestData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;

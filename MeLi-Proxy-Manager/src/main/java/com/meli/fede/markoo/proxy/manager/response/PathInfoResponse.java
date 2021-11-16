@@ -1,6 +1,6 @@
-package com.meli.fede.markoo.proxy.view.response;
+package com.meli.fede.markoo.proxy.manager.response;
 
-import com.meli.fede.markoo.proxy.view.data.model.RequestData;
+import com.meli.fede.markoo.proxy.manager.data.model.RequestData;
 import lombok.Data;
 import org.springframework.util.ObjectUtils;
 

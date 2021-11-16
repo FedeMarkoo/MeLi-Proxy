@@ -1,4 +1,4 @@
-package com.meli.fede.markoo.proxy.view.response;
+package com.meli.fede.markoo.proxy.manager.response;
 
 import lombok.Data;
 

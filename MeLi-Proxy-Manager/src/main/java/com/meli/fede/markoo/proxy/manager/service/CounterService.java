@@ -1,11 +1,11 @@
-package com.meli.fede.markoo.proxy.view.service;
+package com.meli.fede.markoo.proxy.manager.service;
 
-import com.meli.fede.markoo.proxy.view.data.model.RequestData;
-import com.meli.fede.markoo.proxy.view.data.repository.MongoRepository;
-import com.meli.fede.markoo.proxy.view.response.ComboInfoResponse;
-import com.meli.fede.markoo.proxy.view.response.IpInfoResponse;
-import com.meli.fede.markoo.proxy.view.response.PathInfoResponse;
-import com.meli.fede.markoo.proxy.view.response.UserAgentInfoResponse;
+import com.meli.fede.markoo.proxy.manager.data.model.RequestData;
+import com.meli.fede.markoo.proxy.manager.data.repository.MongoRepository;
+import com.meli.fede.markoo.proxy.manager.response.ComboInfoResponse;
+import com.meli.fede.markoo.proxy.manager.response.IpInfoResponse;
+import com.meli.fede.markoo.proxy.manager.response.PathInfoResponse;
+import com.meli.fede.markoo.proxy.manager.response.UserAgentInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

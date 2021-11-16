@@ -1,7 +1,7 @@
-package com.meli.fede.markoo.proxy.view.contoller;
+package com.meli.fede.markoo.proxy.manager.controller;
 
 
-import com.meli.fede.markoo.proxy.view.service.LogService;
+import com.meli.fede.markoo.proxy.manager.service.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

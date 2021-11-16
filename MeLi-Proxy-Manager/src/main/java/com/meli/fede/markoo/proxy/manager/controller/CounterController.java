@@ -1,10 +1,10 @@
-package com.meli.fede.markoo.proxy.view.contoller;
+package com.meli.fede.markoo.proxy.manager.controller;
 
-import com.meli.fede.markoo.proxy.view.response.ComboInfoResponse;
-import com.meli.fede.markoo.proxy.view.response.IpInfoResponse;
-import com.meli.fede.markoo.proxy.view.response.PathInfoResponse;
-import com.meli.fede.markoo.proxy.view.response.UserAgentInfoResponse;
-import com.meli.fede.markoo.proxy.view.service.CounterService;
+import com.meli.fede.markoo.proxy.manager.response.ComboInfoResponse;
+import com.meli.fede.markoo.proxy.manager.response.IpInfoResponse;
+import com.meli.fede.markoo.proxy.manager.response.PathInfoResponse;
+import com.meli.fede.markoo.proxy.manager.response.UserAgentInfoResponse;
+import com.meli.fede.markoo.proxy.manager.service.CounterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
