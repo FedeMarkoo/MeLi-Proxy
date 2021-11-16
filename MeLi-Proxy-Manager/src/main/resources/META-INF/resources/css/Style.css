@@ -1,6 +1,7 @@
 
 .table {
     flex: 50%;
+    margin-inline: 1%;
 }
 
 .tableContainer {
@@ -27,4 +28,24 @@ table tr:nth-child(even) {
 
 table tr:hover {
     background-color: #d4d3d3;
+}
+
+#progressBar {
+    width: 90%;
+    margin: 10px auto;
+    height: 22px;
+    color: white;
+    background-color: #343434;
+    overflow: hidden;
+}
+
+#progressBar div {
+    height: 100%;
+    text-align: right;
+    padding: 0 10px;
+    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+    width: 0;
+    background-color: #b3b3b3;
+    box-sizing: border-box;
+    overflow: hidden;
 }

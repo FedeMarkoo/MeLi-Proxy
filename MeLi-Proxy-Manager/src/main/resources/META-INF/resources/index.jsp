@@ -20,6 +20,9 @@
 </HEAD>
 
 <body>
+<div id="progressBar">
+    <div></div>
+</div>
 <div>
     <div ng-app="meliProxy" ng-controller="ProxyController" ng-init="getData()">
         <div class="tableContainer">
@@ -49,7 +52,7 @@
                         <th>UserAgents in Blacklist</th>
                     </tr>
                     <tr ng-repeat="userAgent in userAgentBlacklist">
-                        <td>{{userAgent}}</td>
+                        <td ng-dblclick="whiteUserAgent()">{{userAgent}}</td>
                     </tr>
                 </table>
             </div>
@@ -175,6 +178,45 @@
                     }
                 });
             }
+
+            $scope.whiteIp = function () {
+                let item = event.target.textContent;
+                $.ajax({
+                    url: "/blacklist/ip/" + event.target.textContent,
+                    type: 'DELETE',
+                    success: function () {
+                        var index = $scope.userAgentBlacklist.indexOf(item);
+                        $scope.userAgentBlacklist.splice(index, 1);
+                    }
+                });
+            }
+
+            $scope.whiteUserAgent = function () {
+                let item = event.target.textContent;
+                $.ajax({
+                    url: "/blacklist/userAgent/" + item,
+                    type: 'DELETE',
+                    success: function () {
+                        var index = $scope.userAgentBlacklist.indexOf(item);
+                        $scope.userAgentBlacklist.splice(index, 1);
+                    }
+                });
+            }
+
+            function progress(timeleft, timetotal, $element) {
+                var progressBarWidth = timeleft * $element.width() / timetotal;
+                $element.find('div').animate({width: progressBarWidth}, 500).html(timeleft + " seconds to refresh");
+                if (timeleft > 0) {
+                    setTimeout(function () {
+                        progress(timeleft - 1, timetotal, $element);
+                    }, 1000);
+                } else {
+                    $scope.getData();
+                    progress(30, 30, $element);
+                }
+            };
+
+            progress(30, 30, $('#progressBar'));
         }
     );
 </script>
