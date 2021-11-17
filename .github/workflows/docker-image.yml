@@ -1,4 +1,5 @@
-name: Docker Image CI
+
+name: Maven CI/CD
 
 on:
   push:
@@ -6,13 +7,34 @@ on:
   pull_request:
     branches: [ main ]
 
-jobs:
-
-  build:
-
+jobs:    
+  publish-job:
+      runs-on: ubuntu-latest
+      needs: [build_and_test]
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 8
+        - run: mvn -B package --file pom.xml -DskipTests
+        - run: mkdir staging && cp target/*.jar staging
+        - uses: actions/upload-artifact@v1
+          with:
+            name: Package
+            path: staging
+  
+  build-docker-image:
+    name: Publish to Docker Hub
     runs-on: ubuntu-latest
+    needs: [publish-job]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file ./MeLi-Proxy-Api/Dockerfile --tag meli-proxy:$(date +%s)
+      - uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        run: docker login -u fedemarkoo -p asd123qwe
+      - name: Build Container image
+        run: docker build -t meliproxyrepo:latest .
+      - name: Publish Docker image
+        run: docker push meliproxyrepo
+
+view rawfinal_workflow.yml hosted with ❤ by GitHub
