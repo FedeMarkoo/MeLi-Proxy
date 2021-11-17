@@ -22,7 +22,6 @@
     <modules>
         <module>MeLi-Proxy-Api</module>
         <module>MeLi-Proxy-Manager</module>
-        <module>MeLi-Proxy-View</module>
     </modules>
 
 

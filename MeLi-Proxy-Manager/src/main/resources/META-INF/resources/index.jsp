@@ -27,6 +27,19 @@
     <div ng-app="meliProxy" ng-controller="ProxyController" ng-init="getData()">
         <div class="tableContainer">
             <div class="table">
+                <form ng-submit="updateMaxValues()">
+                    <label for="rxIp">Request per IP:</label>
+                    <input type="text" id="rxIp" ng-model="rxIp"><br>
+                    <label for="rxPath">Request per Path:</label>
+                    <input type="text" id="rxPath" ng-model="rxPath"><br>
+                    <label for="rxCombo">Request per Combo:</label>
+                    <input type="text" id="rxCombo" ng-model="rxCombo"><br>
+                    <label for="rxUA">Request per UserAgent:</label>
+                    <input type="text" id="rxUA" ng-model="rxUA"><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <div class="table">
                 <form ng-submit="addIpDenied()">
                     <label for="ipDenied">Ip to Block:</label>
                     <input type="text" id="ipDenied" ng-model="ipDenied">
@@ -37,7 +50,7 @@
                         <th>Ips in Blacklist</th>
                     </tr>
                     <tr ng-repeat="ip in ipBlacklist">
-                        <td>{{ip}}</td>
+                        <td ng-dblclick="whiteIp(ip)">{{ip}}</td>
                     </tr>
                 </table>
             </div>
@@ -52,18 +65,30 @@
                         <th>UserAgents in Blacklist</th>
                     </tr>
                     <tr ng-repeat="userAgent in userAgentBlacklist">
-                        <td ng-dblclick="whiteUserAgent()">{{userAgent}}</td>
+                        <td ng-dblclick="whiteUserAgent(userAgent)">{{userAgent}}</td>
                     </tr>
                 </table>
             </div>
         </div>
 
+        <label for="chartIpMetrics">Ip Metrics:</label>
         <div class="metrics,ip,userAgents">
             <div id="chartIpMetrics"></div>
         </div>
 
+        <label for="chartPathMetrics">Path Metrics:</label>
         <div class="metrics,path,userAgents">
             <div id="chartPathMetrics"></div>
+        </div>
+
+        <label for="chartComboMetrics">Combo Metrics:</label>
+        <div class="metrics,path,userAgents">
+            <div id="chartComboMetrics"></div>
+        </div>
+
+        <label for="chartUserAgentMetrics">UserAgent Metrics:</label>
+        <div class="metrics,userAgent,userAgents">
+            <div id="chartUserAgentMetrics"></div>
         </div>
 
     </div>
@@ -74,6 +99,12 @@
     angular.module('meliProxy', ['angular.filter', 'zingchart-angularjs']).controller('ProxyController',
         function ($scope, $http) {
             $scope.getData = function () {
+                $http.get('/accessControllerValues').success(function (response) {
+                    $scope.rxIp = response["maxRequestPerIp"];
+                    $scope.rxPath = response["maxRequestPerPath"];
+                    $scope.rxCombo = response["maxRequestPerCombo"];
+                    $scope.rxUA = response["maxRequestPerUserAgent"];
+                });
                 $http.get('/blacklist/ip').success(function (response) {
                     $scope.ipBlacklist = response;
                 });
@@ -81,79 +112,33 @@
                     $scope.userAgentBlacklist = response;
                 });
                 $http.get('/counter/ip').success(function (response) {
-                    let keys = Object.values(response).map(function (a) {
-                        return a["ip"];
-                    });
-                    let request = Object.values(response).map(function (a) {
-                        return a["requestCant"] - a["deniedCant"];
-                    });
-                    let denied = Object.values(response).map(function (a) {
-                        return a["deniedCant"];
-                    });
-
-                    let chartConfig = {
-                        type: 'hbar',
-                        "plot": {
-                            "bar-width": "50%",
-                            "stacked": true,
-                        },
-                        plotarea: {
-                            margin: 'dynamic'
-                        },
-                        'scale-x': {
-                            labels: keys
-                        },
-                        series: [
-                            {values: request},
-                            {values: denied}
-                        ]
-                    };
-
-                    zingchart.render({
-                        id: 'chartIpMetrics',
-                        data: chartConfig,
-                        height: 400,
-                        width: "100%"
-                    });
+                    processResponse(response, "ip", "chartIpMetrics")
                 });
 
                 $http.get('/counter/path').success(function (response) {
-                    $scope.pathsDenied = response;
+                    processResponse(response, "path", "chartPathMetrics")
+                });
 
-                    let keys = Object.values(response).map(function (a) {
-                        return a["path"];
-                    });
-                    let request = Object.values(response).map(function (a) {
-                        return a["requestCant"] - a["deniedCant"];
-                    });
-                    let denied = Object.values(response).map(function (a) {
-                        return a["deniedCant"];
-                    });
+                $http.get('/counter/combo').success(function (response) {
+                    processResponse(response, "combo", "chartComboMetrics")
+                });
 
-                    let chartConfig = {
-                        type: 'hbar',
-                        "plot": {
-                            "bar-width": "50%",
-                            "stacked": true,
-                        },
-                        plotarea: {
-                            margin: 'dynamic'
-                        },
-                        'scale-x': {
-                            labels: keys
-                        },
-                        series: [
-                            {values: request},
-                            {values: denied}
-                        ]
-                    };
+                $http.get('/counter/userAgent').success(function (response) {
+                    processResponse(response, "userAgent", "chartUserAgentMetrics")
+                });
+            }
 
-                    zingchart.render({
-                        id: 'chartPathMetrics',
-                        data: chartConfig,
-                        height: 400,
-                        width: "100%"
-                    });
+            $scope.updateMaxValues = function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/accessControllerValues",
+                    data: JSON.stringify({
+                        "maxRequestPerIp": $scope.rxIp,
+                        "maxRequestPerPath": $scope.rxPath,
+                        "maxRequestPerCombo": $scope.rxCombo,
+                        "maxRequestPerUserAgent": $scope.rxUA
+                    }),
+                    contentType: 'application/json'
                 });
             }
 
@@ -179,10 +164,9 @@
                 });
             }
 
-            $scope.whiteIp = function () {
-                let item = event.target.textContent;
+            $scope.whiteIp = function (item) {
                 $.ajax({
-                    url: "/blacklist/ip/" + event.target.textContent,
+                    url: "/blacklist/ip/" + item,
                     type: 'DELETE',
                     success: function () {
                         var index = $scope.userAgentBlacklist.indexOf(item);
@@ -191,8 +175,7 @@
                 });
             }
 
-            $scope.whiteUserAgent = function () {
-                let item = event.target.textContent;
+            $scope.whiteUserAgent = function (item) {
                 $.ajax({
                     url: "/blacklist/userAgent/" + item,
                     type: 'DELETE',
@@ -212,11 +195,48 @@
                     }, 1000);
                 } else {
                     $scope.getData();
-                    progress(30, 30, $element);
+                    progress(timetotal, timetotal, $element);
                 }
             };
 
             progress(30, 30, $('#progressBar'));
+
+            function processResponse(response, type, chart) {
+                let keys = Object.values(response).map(function (a) {
+                    return a[type];
+                });
+                let request = Object.values(response).map(function (a) {
+                    return a["requestCant"] - a["deniedCant"];
+                });
+                let denied = Object.values(response).map(function (a) {
+                    return a["deniedCant"];
+                });
+
+                let chartConfig = {
+                    type: 'hbar',
+                    "plot": {
+                        "bar-width": "50%",
+                        "stacked": true,
+                    },
+                    plotarea: {
+                        margin: 'dynamic'
+                    },
+                    'scale-x': {
+                        labels: keys
+                    },
+                    series: [
+                        {values: request},
+                        {values: denied}
+                    ]
+                };
+
+                zingchart.render({
+                    id: chart,
+                    data: chartConfig,
+                    height: 400,
+                    width: "100%"
+                });
+            }
         }
     );
 </script>
