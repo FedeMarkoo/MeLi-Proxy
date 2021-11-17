@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,22 +21,22 @@ public class CounterController {
     private final CounterService counterService;
 
     @GetMapping("/ip")
-    public ResponseEntity<ArrayList<IpInfoResponse>> counterIp() {
+    public ResponseEntity<List<IpInfoResponse>> counterIp() {
         return ResponseEntity.ok(this.counterService.getCounterByIp());
     }
 
     @GetMapping("/path")
-    public ResponseEntity<ArrayList<PathInfoResponse>> counterPath() {
+    public ResponseEntity<List<PathInfoResponse>> counterPath() {
         return ResponseEntity.ok(this.counterService.getCounterByPath());
     }
 
     @GetMapping("/combo")
-    public ResponseEntity<ArrayList<ComboInfoResponse>> counterCombo() {
+    public ResponseEntity<List<ComboInfoResponse>> counterCombo() {
         return ResponseEntity.ok(this.counterService.getCounterByCombo());
     }
 
     @GetMapping("/userAgent")
-    public ResponseEntity<ArrayList<UserAgentInfoResponse>> counterUserAgent() {
+    public ResponseEntity<List<UserAgentInfoResponse>> counterUserAgent() {
         return ResponseEntity.ok(this.counterService.getCounterByUserAgent());
     }
 }

@@ -11,7 +11,6 @@
     <artifactId>meli-proxy-manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>MeLi Proxy Manager</name>
-    <packaging>war</packaging>
 
     <description>
         Mercadolibre hoy en día correr sus aplicaciones en más de 20000 servidores, estos suelen comunicarse
