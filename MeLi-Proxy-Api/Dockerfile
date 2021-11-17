@@ -1,6 +1,6 @@
 FROM maven:3.6.0-jdk-11-slim AS build
 
-COPY meli-proxy-api/* /
+COPY MeLi-Proxy-Api/* /
 
 RUN mvn -f pom.xml clean package -DskipTests=true
 
