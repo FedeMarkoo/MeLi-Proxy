@@ -31,4 +31,8 @@ public class RedisRepository {
     public boolean isBlackUserAgent(final String userAgent) {
         return !this.redisTemplate.keys(BLACK_LIST_USER_AGENT.concat(userAgent)).isEmpty();
     }
+
+    public void blackIp(final String host) {
+        this.redisTemplate.opsForValue().set(BLACK_LIST_IP.concat(host), 1);
+    }
 }

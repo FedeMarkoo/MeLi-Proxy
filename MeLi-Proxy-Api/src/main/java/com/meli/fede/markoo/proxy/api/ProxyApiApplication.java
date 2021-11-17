@@ -6,12 +6,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @OpenAPIDefinition(
         info = @Info(
                 title = "MELI",
                 version = "1.0.0"))
 @EnableAsync
+@EnableScheduling
 @EnableRedisRepositories
 @SpringBootApplication
 public class ProxyApiApplication {

@@ -7,10 +7,9 @@ springdoc:
 com.meli.fede.markoo:
   proxy:
     baseurl: api.mercadolibre.com
-    maxvalues:
-      maxRequestPerCombo: 20
-      maxRequestPerPath: 20
-      maxRequestPerIp: 20
+    refresh-cant-delay: 5000
+    blacklist:
+      factor: 2
 
 spring:
   redis:

@@ -15,13 +15,13 @@ public class MetricsService {
 
     @SneakyThrows
     @Async
-    public void incrementMetrics(final String ip, final String path, final String userAgent, final boolean denieded) {
+    public void incrementMetrics(final String ip, final String path, final String userAgent, final boolean denied) {
         final RequestData data = RequestData.builder()
                 .ip(ip)
                 .path(path)
                 .userAgent(userAgent)
                 .build();
-        this.repository.incCounter(data, denieded);
+        this.repository.incCounter(data, denied);
     }
 
 }
