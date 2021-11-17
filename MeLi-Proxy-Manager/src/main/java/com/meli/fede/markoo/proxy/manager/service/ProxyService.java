@@ -14,8 +14,7 @@ public class ProxyService {
     private final MongoRepository repository;
 
     public AccessManagerValues getAccessManagerValues() {
-        final AccessManagerValues maxCantRequest = this.repository.getMaxCantRequest();
-        return maxCantRequest;
+        return this.repository.getMaxCantRequest();
     }
 
     public void setAccessManagerValues(@RequestBody @Valid final AccessManagerValues request) {

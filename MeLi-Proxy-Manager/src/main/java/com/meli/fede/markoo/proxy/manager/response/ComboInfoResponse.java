@@ -2,8 +2,10 @@ package com.meli.fede.markoo.proxy.manager.response;
 
 import com.meli.fede.markoo.proxy.manager.data.model.RequestData;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ComboInfoResponse extends BaseInfoResponse {
     private String combo;
 

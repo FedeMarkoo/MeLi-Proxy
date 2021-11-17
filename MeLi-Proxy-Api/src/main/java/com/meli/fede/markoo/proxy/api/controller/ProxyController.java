@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 
 @RestController
@@ -25,7 +24,7 @@ public class ProxyController {
             , final HttpMethod httpMethod
             , @RequestHeader(value = "User-Agent") final String userAgent
             , @RequestHeader(value = "Host") final String host
-            , @RequestBody(required = false) final Optional<Object> body) {
+            , @RequestBody(required = false) final Object body) {
 
         final String path = request.getServletPath();
         if (this.accessService.validateAccess(path, host, userAgent)) {

@@ -23,11 +23,11 @@ import org.springframework.test.context.ActiveProfiles;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
@@ -97,20 +97,19 @@ class AccessServiceTest {
     @Test
     void processProxyFail() {
         final HttpServletResponse response = new MockHttpServletResponse();
-        final Object actual = this.service.processProxy(
+        this.service.processProxy(
                 response
                 , HttpMethod.GET
                 , Optional.empty()
                 , "/fakePath");
 
-        assertTrue(HttpStatus.resolve(response.getStatus()).isError());
+        assertTrue(Objects.requireNonNull(HttpStatus.resolve(response.getStatus())).isError());
     }
 
     public String loadTestJson(final String fileName) {
         final URL url = Resources.getResource(this.getClass(), fileName);
         try {
-            final String data = Resources.toString(url, Charsets.UTF_8);
-            return data;
+            return Resources.toString(url, Charsets.UTF_8);
         } catch (final IOException e) {
             throw new RuntimeException("Couldn't load a JSON file.", e);
         }

@@ -21,7 +21,7 @@ public class CounterService {
         return this.mongoRepository.getData();
     }
 
-    public ArrayList<IpInfoResponse> getCounterByIp() {
+    public List<IpInfoResponse> getCounterByIp() {
         final List<RequestData> data = this.getData();
         return data.stream()
                 .sorted(Comparator.comparing(RequestData::getDeniedCant))
@@ -40,7 +40,7 @@ public class CounterService {
                         , ArrayList::addAll);
     }
 
-    public ArrayList<ComboInfoResponse> getCounterByCombo() {
+    public List<ComboInfoResponse> getCounterByCombo() {
         final List<RequestData> data = this.getData();
         return data.stream()
                 .sorted(Comparator.comparing(RequestData::getDeniedCant))
@@ -59,7 +59,7 @@ public class CounterService {
                         , ArrayList::addAll);
     }
 
-    public ArrayList<PathInfoResponse> getCounterByPath() {
+    public List<PathInfoResponse> getCounterByPath() {
         final List<RequestData> data = this.getData();
         return data.stream()
                 .sorted(Comparator.comparing(RequestData::getDeniedCant))
@@ -78,7 +78,7 @@ public class CounterService {
                         , ArrayList::addAll);
     }
 
-    public ArrayList<UserAgentInfoResponse> getCounterByUserAgent() {
+    public List<UserAgentInfoResponse> getCounterByUserAgent() {
         final List<RequestData> data = this.getData();
         return data.stream()
                 .sorted(Comparator.comparing(RequestData::getDeniedCant))

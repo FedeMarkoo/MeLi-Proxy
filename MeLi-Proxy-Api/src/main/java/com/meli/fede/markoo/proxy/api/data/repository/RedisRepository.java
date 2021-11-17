@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Repository
@@ -17,7 +18,7 @@ public class RedisRepository {
     @Value("${spring.cache.redis.time-to-live}")
     private long timeout;
 
-    public long getAndIncrement(final String key) {
+    public Long getAndIncrement(final String key) {
         final ValueOperations<String, Integer> ops = this.redisTemplate.opsForValue();
         final Long increment = ops.increment(key, 1);
         this.redisTemplate.expire(key, this.timeout, TimeUnit.SECONDS);
@@ -25,11 +26,11 @@ public class RedisRepository {
     }
 
     public boolean isBlackIp(final String host) {
-        return !this.redisTemplate.keys(BLACK_LIST_IP.concat(host)).isEmpty();
+        return !Objects.requireNonNull(this.redisTemplate.keys(BLACK_LIST_IP.concat(host))).isEmpty();
     }
 
     public boolean isBlackUserAgent(final String userAgent) {
-        return !this.redisTemplate.keys(BLACK_LIST_USER_AGENT.concat(userAgent)).isEmpty();
+        return !Objects.requireNonNull(this.redisTemplate.keys(BLACK_LIST_USER_AGENT.concat(userAgent))).isEmpty();
     }
 
     public void blackIp(final String host) {

@@ -1,15 +1,16 @@
+<%--suppress ALL --%>
+<%--suppress ALL --%>
 <!DOCTYPE html>
 <%
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", -1);
 %>
-<html>
+<html lang="en">
 
 <HEAD>
-    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-    <META HTTP-EQUIV="Expires" CONTENT="-1">
     <title>Manager Proxy</title>
+    <meta content="text/html; charset=utf-8"/>
     <link href="css/Style.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a7e4de9cfc.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
@@ -47,7 +48,7 @@
                 </form>
                 <table>
                     <tr>
-                        <th>Ips in Blacklist</th>
+                        <th id="headIp">Ips in Blacklist</th>
                     </tr>
                     <tr ng-repeat="ip in ipBlacklist">
                         <td ng-dblclick="whiteIp(ip)">{{ip}}</td>
@@ -62,7 +63,7 @@
                 </form>
                 <table>
                     <tr>
-                        <th>UserAgents in Blacklist</th>
+                        <th id="headUA">UserAgents in Blacklist</th>
                     </tr>
                     <tr ng-repeat="userAgent in userAgentBlacklist">
                         <td ng-dblclick="whiteUserAgent(userAgent)">{{userAgent}}</td>
@@ -92,7 +93,6 @@
         </div>
 
     </div>
-</div>
 </div>
 
 <script>
@@ -169,7 +169,7 @@
                     url: "/blacklist/ip/" + item,
                     type: 'DELETE',
                     success: function () {
-                        var index = $scope.userAgentBlacklist.indexOf(item);
+                        const index = $scope.userAgentBlacklist.indexOf(item);
                         $scope.userAgentBlacklist.splice(index, 1);
                     }
                 });
@@ -180,14 +180,14 @@
                     url: "/blacklist/userAgent/" + item,
                     type: 'DELETE',
                     success: function () {
-                        var index = $scope.userAgentBlacklist.indexOf(item);
+                        const index = $scope.userAgentBlacklist.indexOf(item);
                         $scope.userAgentBlacklist.splice(index, 1);
                     }
                 });
             }
 
             function progress(timeleft, timetotal, $element) {
-                var progressBarWidth = timeleft * $element.width() / timetotal;
+                const progressBarWidth = timeleft * $element.width() / timetotal;
                 $element.find('div').animate({width: progressBarWidth}, 500).html(timeleft + " seconds to refresh");
                 if (timeleft > 0) {
                     setTimeout(function () {
@@ -197,7 +197,7 @@
                     $scope.getData();
                     progress(timetotal, timetotal, $element);
                 }
-            };
+            }
 
             progress(30, 30, $('#progressBar'));
 

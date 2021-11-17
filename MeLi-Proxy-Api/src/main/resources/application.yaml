@@ -24,5 +24,3 @@ spring:
   data:
     mongodb:
       database: MeLi-Proxy
-#      uri: mongodb+srv://meli:meli@cluster0.2ynos.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-

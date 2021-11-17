@@ -20,7 +20,6 @@ import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.SSLException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,28 +66,28 @@ public class AccessService {
     }
 
     private boolean validateUserAgent(final String userAgent) {
-        final long value = this.redisRepository.getAndIncrement(userAgent);
+        final Long value = this.redisRepository.getAndIncrement(userAgent);
         return value <= this.accessManagerValues.getMaxRequestPerUserAgent();
     }
 
     private boolean validateCombo(final String ip, final String path) {
-        final long value = this.redisRepository.getAndIncrement(ip.concat(path));
+        final Long value = this.redisRepository.getAndIncrement(ip.concat(path));
         return value <= this.accessManagerValues.getMaxRequestPerCombo();
     }
 
     private boolean validatePath(final String path) {
-        final long value = this.redisRepository.getAndIncrement(path);
+        final Long value = this.redisRepository.getAndIncrement(path);
         return value <= this.accessManagerValues.getMaxRequestPerPath();
     }
 
     private boolean validateIp(final String ip) {
-        final long value = this.redisRepository.getAndIncrement(ip);
+        final Long value = this.redisRepository.getAndIncrement(ip);
         this.autoBlacklistIP(value, ip);
         return value <= this.accessManagerValues.getMaxRequestPerIp();
     }
 
     @Async
-    public void autoBlacklistIP(final long value, final String host) {
+    public void autoBlacklistIP(final Long value, final String host) {
         if (value > this.accessManagerValues.getMaxRequestPerIp() * this.factorAutoBlacklist) {
             this.redisRepository.blackIp(host);
         }
@@ -97,10 +96,12 @@ public class AccessService {
 
     public Object processProxy(final HttpServletResponse response,
                                final HttpMethod httpMethod,
-                               @RequestBody(required = false) final Optional<Object> body,
+                               @RequestBody(required = false) final Object body,
                                final String path) {
         final WebClient.RequestBodyUriSpec spec = this.localApiClient.method(httpMethod);
-        body.ifPresent(spec::bodyValue);
+        if (body != null) {
+            spec.bodyValue(body);
+        }
         return spec.uri(path)
                 .retrieve()
                 .onStatus(HttpStatus::isError, cr -> {

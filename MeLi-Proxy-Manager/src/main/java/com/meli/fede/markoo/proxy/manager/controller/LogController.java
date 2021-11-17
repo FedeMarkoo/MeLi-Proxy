@@ -16,12 +16,12 @@ public class LogController {
     private final LogService logService;
 
     @GetMapping("/ip/denied")
-    public ResponseEntity getIpsDenied() {
+    public ResponseEntity<Object> getIpsDenied() {
         return ResponseEntity.ok(this.logService.getIpsDenied());
     }
 
     @GetMapping("/path/denied")
-    public ResponseEntity getPathsDenied() {
+    public ResponseEntity<Object> getPathsDenied() {
         return ResponseEntity.ok(this.logService.getPathsDenied());
     }
 }

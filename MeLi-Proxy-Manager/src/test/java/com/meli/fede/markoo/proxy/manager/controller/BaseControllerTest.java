@@ -13,13 +13,10 @@ public abstract class BaseControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    protected ResultActions put(final String uri, final Object body) throws Exception {
+    protected ResultActions put(final String uri) throws Exception {
         final var request = MockMvcRequestBuilders.put(this.getBaseURI() + uri)
                 .contentType(MediaType.APPLICATION_JSON);
 
-        if (body != null) {
-            request.content(new ObjectMapper().writeValueAsString(body));
-        }
         request.accept(MediaType.APPLICATION_JSON);
 
         return this.mockMvc.perform(request);
@@ -34,8 +31,8 @@ public abstract class BaseControllerTest {
         return this.mockMvc.perform(request);
     }
 
-    protected ResultActions post(final String uri, final Object body) throws Exception {
-        final var request = MockMvcRequestBuilders.post(this.getBaseURI() + uri)
+    protected ResultActions post(final Object body) throws Exception {
+        final var request = MockMvcRequestBuilders.post(this.getBaseURI() + "")
                 .contentType(MediaType.APPLICATION_JSON);
 
         if (body != null) {
@@ -56,8 +53,4 @@ public abstract class BaseControllerTest {
     }
 
     protected abstract String getBaseURI();
-
-    protected ResultActions put(final String uri) throws Exception {
-        return this.put(uri, null);
-    }
 }

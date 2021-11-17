@@ -40,7 +40,7 @@ public class ObjectGenerator {
         setPropertiesPath("testfile.properties");
     }
 
-    private static <E> E createContents(final Class<E> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    private static <E> E createContents(final Class<E> clazz) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         E instance = null;
         if (Modifier.isAbstract(clazz.getModifiers()) || clazz.isInterface()) {
             final Reflections reflections = getReflections(clazz);
@@ -51,9 +51,7 @@ public class ObjectGenerator {
                     final Class<? extends E> next = iterator.next();
                     if (!Modifier.isAbstract(next.getModifiers()) && !next.isInterface()) {
                         final Constructor<? extends E> constructor = next.getConstructor();
-                        if (constructor != null) {
-                            instance = constructor.newInstance();
-                        }
+                        instance = constructor.newInstance();
                     }
                 } catch (final Exception e) {
                 }
@@ -73,8 +71,8 @@ public class ObjectGenerator {
                     instance = constructor.newInstance(params.toArray());
                 } catch (final Exception e2) {
                     final Method build = clazz.getClasses()[0].getMethod("build");
-                    final Object builder = clazz.getMethod("builder").invoke(null, null);
-                    instance = (E) build.invoke(builder, null);
+                    final Object builder = clazz.getMethod("builder").invoke(null);
+                    instance = (E) build.invoke(builder);
                 }
             }
         }
@@ -95,7 +93,7 @@ public class ObjectGenerator {
     }
 
     private static <E> E getFromCache(final Class<E> c) {
-        final List<E> list = ObjectGenerator.cache.get(c.getName());
+        final List<E> list = (List<E>) ObjectGenerator.cache.get(c.getName());
         if (list == null) {
             return null;
         }
@@ -120,7 +118,7 @@ public class ObjectGenerator {
         return allFields;
     }
 
-    private static <E> boolean setValueByProperty(final E obj, final Field field, final Map<String, Object> valuedFields, final List<String> ignoredFields) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+    private static <E> boolean setValueByProperty(final E obj, final Field field) {
         if (prop == null) {
             return false;
         }
@@ -144,7 +142,7 @@ public class ObjectGenerator {
         return false;
     }
 
-    private static <E> boolean setValueFromProperty(final E obj, final Field field, String value) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+    private static <E> boolean setValueFromProperty(final E obj, final Field field, String value) {
         if (value.contains(delimiter)) {
             final String[] split = value.split(delimiter);
             value = split[Math.min(split.length - 1, getCacheSize(obj))];
@@ -165,7 +163,7 @@ public class ObjectGenerator {
         return false;
     }
 
-    private static <E> boolean setValueFromMap(final E obj, final Field field, final Object value) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+    private static <E> boolean setValueFromMap(final E obj, final Field field, final Object value) {
         if (value instanceof String) {
             return setValueFromProperty(obj, field, (String) value);
         }
@@ -230,19 +228,17 @@ public class ObjectGenerator {
         int maxLength = 20;
         boolean nulleable = true;
         final Annotation[] declaredAnnotations = field.getDeclaredAnnotations();
-        if (declaredAnnotations != null) {
-            for (final Annotation declaredAnnotation : declaredAnnotations) {
-                if (declaredAnnotation instanceof Column) {
-                    final Column colAnnot = (Column) declaredAnnotation;
-                    maxLength = colAnnot.length();
-                    if (overflowedFields) {
-                        minLength = maxLength;
-                        maxLength *= 1.5;
-                    }
-                    nulleable = nulleable && colAnnot.nullable();
-                } else if (declaredAnnotation.annotationType().getName().equals("javax.validation.constraints.NotNull")) {
-                    nulleable = false;
+        for (final Annotation declaredAnnotation : declaredAnnotations) {
+            if (declaredAnnotation instanceof Column) {
+                final Column colAnnot = (Column) declaredAnnotation;
+                maxLength = colAnnot.length();
+                if (overflowedFields) {
+                    minLength = maxLength;
+                    maxLength *= 1.5;
                 }
+                nulleable = nulleable && colAnnot.nullable();
+            } else if (declaredAnnotation.annotationType().getName().equals("javax.validation.constraints.NotNull")) {
+                nulleable = false;
             }
         }
         if (nulleable && faker.bool().bool() && !forceValue) {
@@ -256,7 +252,7 @@ public class ObjectGenerator {
         } else if ("long".equals(name)) {
             field.setLong(obj, emptyValues ? 0 : faker.number().numberBetween(Integer.MIN_VALUE, Integer.MAX_VALUE));
         } else if ("java.lang.Long".equals(name)) {
-            field.set(obj, new Long(emptyValues ? 0 : faker.number().numberBetween(Integer.MIN_VALUE, Integer.MAX_VALUE)));
+            field.set(obj, (long) (emptyValues ? 0 : faker.number().numberBetween(Integer.MIN_VALUE, Integer.MAX_VALUE)));
         } else if ("byte".equals(name)) {
             field.setByte(obj, emptyValues ? 0 : (byte) faker.number().numberBetween(Byte.MIN_VALUE, Byte.MAX_VALUE));
         } else if ("boolean".equals(name)) {
@@ -346,7 +342,7 @@ public class ObjectGenerator {
     @SneakyThrows
     public static <E> E createInstance(final Class<E> c, final boolean forceCreate, final boolean forceValue, final boolean emptyFields,
                                        final boolean overflowedFields, final Map<String, Object> valuedFields, final List<String> ignoredFields) {
-        E obj = null;
+        E obj;
         if (!forceCreate) {
             obj = getFromCache(c);
             if (obj != null) {
@@ -358,9 +354,9 @@ public class ObjectGenerator {
         for (final Field field : declaredFields) {
             field.setAccessible(true);
             if (!ignoredFields.contains(field.getName()) && !ignoredFields.contains(field.getDeclaringClass().getSimpleName() + "." + field.getName())) {
-                if (emptyFields || !ObjectGenerator.setValueByProperty(obj, field, valuedFields, ignoredFields)) {
-                    if (!setValueByMap(obj, field, forceValue, emptyFields, overflowedFields, valuedFields, ignoredFields)) {
-                        if (!setValueByName(obj, field, forceValue, emptyFields, overflowedFields, valuedFields, ignoredFields)) {
+                if (emptyFields || !ObjectGenerator.setValueByProperty(obj, field)) {
+                    if (!setValueByMap(obj, field, valuedFields)) {
+                        if (!setValueByName(obj, field, forceValue, emptyFields, overflowedFields)) {
                             if (!setValueByType(obj, field, forceValue, emptyFields, overflowedFields, valuedFields, ignoredFields)) {
                                 final Object instance = ObjectGenerator.createInstance(field.getType(), forceCreate, forceValue, emptyFields, overflowedFields, valuedFields, ignoredFields);
                                 field.set(obj, instance);
@@ -373,7 +369,7 @@ public class ObjectGenerator {
         return obj;
     }
 
-    private static <E> boolean setValueByMap(final E obj, final Field field, final boolean forceValue, final boolean emptyValues, final boolean overflowedFields, final Map<String, Object> valuedFields, final List<String> ignoredFields) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private static <E> boolean setValueByMap(final E obj, final Field field, final Map<String, Object> valuedFields) {
         final String name = field.getName();
 
         String fieldName = obj.getClass().getName() + "." + name;
@@ -397,27 +393,23 @@ public class ObjectGenerator {
         return false;
     }
 
-    private static <E> boolean setValueByName(final E obj, final Field field, final boolean forceValue, final boolean emptyValues, final boolean overflowedFields, final Map<String, Object> valuedFields, final List<String> ignoredFields) throws IllegalAccessException, JsonProcessingException {
+    private static <E> boolean setValueByName(final E obj, final Field field, final boolean forceValue, final boolean emptyValues, final boolean overflowedFields) throws IllegalAccessException, JsonProcessingException {
         final Class<?> type = field.getType();
         final String name = type.getName();
 
-        int minLength = 0;
-        int maxLength = 20;
+        int maxLength;
         boolean nulleable = true;
         final Annotation[] declaredAnnotations = field.getDeclaredAnnotations();
-        if (declaredAnnotations != null) {
-            for (final Annotation declaredAnnotation : declaredAnnotations) {
-                if (declaredAnnotation instanceof Column) {
-                    final Column colAnnot = (Column) declaredAnnotation;
-                    maxLength = colAnnot.length();
-                    if (overflowedFields) {
-                        minLength = maxLength;
-                        maxLength *= 1.5;
-                    }
-                    nulleable = nulleable && colAnnot.nullable();
-                } else if (declaredAnnotation.annotationType().getName().equals("javax.validation.constraints.NotNull")) {
-                    nulleable = false;
+        for (final Annotation declaredAnnotation : declaredAnnotations) {
+            if (declaredAnnotation instanceof Column) {
+                final Column colAnnot = (Column) declaredAnnotation;
+                maxLength = colAnnot.length();
+                if (overflowedFields) {
+                    maxLength *= 1.5;
                 }
+                nulleable = nulleable && colAnnot.nullable();
+            } else if (declaredAnnotation.annotationType().getName().equals("javax.validation.constraints.NotNull")) {
+                nulleable = false;
             }
         }
         if (nulleable && faker.bool().bool() && !forceValue) {
@@ -457,12 +449,6 @@ public class ObjectGenerator {
 
     public static <E> E createInstanceFully(final Class<E> c) {
         final E instance = createInstance(c, true, true, false, false, new HashMap<>(), new ArrayList<>());
-        reset();
-        return instance;
-    }
-
-    public static <E> E createInstance(final Class<E> c, final Map<String, Object> valuedFields, final List<String> ignoredFields) {
-        final E instance = createInstance(c, true, true, false, false, valuedFields, new ArrayList<>());
         reset();
         return instance;
     }

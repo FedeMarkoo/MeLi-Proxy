@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +29,7 @@ class AccessControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void get() throws Exception {
+    void get() throws Exception {
         final AccessManagerValues actual = new AccessManagerValues();
         actual.setMaxRequestPerIp(1);
         actual.setMaxRequestPerPath(1);
@@ -49,14 +48,14 @@ class AccessControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void post() throws Exception {
+    void post() throws Exception {
         final AccessManagerValues actual = new AccessManagerValues();
         actual.setMaxRequestPerIp(1);
         actual.setMaxRequestPerPath(1);
         actual.setMaxRequestPerCombo(1);
         actual.setMaxRequestPerUserAgent(1);
 
-        final ResultActions result = this.post("", actual);
+        final ResultActions result = this.post(actual);
 
         result.andExpect(status().is2xxSuccessful());
 

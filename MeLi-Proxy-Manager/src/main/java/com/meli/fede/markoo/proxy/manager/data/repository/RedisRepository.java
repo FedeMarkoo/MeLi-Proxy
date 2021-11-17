@@ -6,6 +6,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,11 +18,11 @@ public class RedisRepository {
     private final RedisTemplate<String, Integer> redisTemplate;
 
     public boolean isBlackIp(final String host) {
-        return !this.redisTemplate.keys(BLACK_LIST_IP.concat(host)).isEmpty();
+        return !Objects.requireNonNull(this.redisTemplate.keys(BLACK_LIST_IP.concat(host))).isEmpty();
     }
 
     public boolean isBlackUserAgent(final String userAgent) {
-        return !this.redisTemplate.keys(BLACK_LIST_USER_AGENT.concat(userAgent)).isEmpty();
+        return !Objects.requireNonNull(this.redisTemplate.keys(BLACK_LIST_USER_AGENT.concat(userAgent))).isEmpty();
     }
 
     public void blackIp(final String host, final boolean isBlack) {
