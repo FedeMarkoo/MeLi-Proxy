@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build /MeLi-Proxy-Api --file Dockerfile --tag meli-proxy:$(date +%s)
+      run: docker build MeLi-Proxy/MeLi-Proxy-Api --file Dockerfile --tag meli-proxy:$(date +%s)
