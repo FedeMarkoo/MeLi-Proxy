@@ -22,10 +22,16 @@ public class ProxyController {
     public Object redirect(final HttpServletRequest request
             , final HttpServletResponse response
             , final HttpMethod httpMethod
-            , @RequestHeader(value = "User-Agent") final String userAgent
-            , @RequestHeader(value = "Host") final String host
+            , @RequestHeader(value = "User-Agent", required = false) String userAgent
+            , @RequestHeader(value = "Host", required = false) String host
             , @RequestBody(required = false) final Object body) {
 
+        if (userAgent == null) {
+            userAgent = "undefined";
+        }
+        if (host == null) {
+            host = request.getRemoteHost();
+        }
         final String path = request.getServletPath();
         if (this.accessService.validateAccess(path, host, userAgent)) {
             return this.accessService.processProxy(response, httpMethod, body, path);
