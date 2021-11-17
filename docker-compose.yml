@@ -2,7 +2,7 @@ services:
   api:
     build: MeLi-Proxy-Api/.
     ports:
-      - "8080:8080"
+      - "80:80"
     depends_on:
       mongo:
         condition: service_started
@@ -14,7 +14,7 @@ services:
   manager:
     build: MeLi-Proxy-Manager/.
     ports:
-      - "8081:8080"
+      - "81:80"
     depends_on:
       redis:
         condition: service_started
