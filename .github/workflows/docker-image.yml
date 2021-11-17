@@ -32,6 +32,6 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u fedemarkoo -p asd123qwe
       - name: Build Container image
-        run: docker build -t meliproxyrepo:latest ./MeLi-Proxy-Api
+        run: docker build -t fedemarkoo/meliproxy:latest ./MeLi-Proxy-Api
       - name: Publish Docker image
-        run: docker push meliproxyrepo
+        run: docker push fedemarkoo/meliproxy
