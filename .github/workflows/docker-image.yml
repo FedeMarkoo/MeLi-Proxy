@@ -36,5 +36,3 @@ jobs:
         run: docker build -t meliproxyrepo:latest .
       - name: Publish Docker image
         run: docker push meliproxyrepo
-
-view rawfinal_workflow.yml hosted with ❤ by GitHub
