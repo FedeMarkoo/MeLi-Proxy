@@ -10,6 +10,7 @@ com.meli.fede.markoo:
     refresh-cant-delay: 5000
     blacklist:
       factor: 2
+    defaultMax: 5
 
 spring:
   redis:
