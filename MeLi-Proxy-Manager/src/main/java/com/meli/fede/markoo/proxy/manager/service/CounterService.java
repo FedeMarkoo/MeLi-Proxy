@@ -24,7 +24,7 @@ public class CounterService {
     public List<IpInfoResponse> getCounterByIp() {
         final List<RequestData> data = this.getData();
         return data.stream()
-                .sorted(Comparator.comparing(RequestData::getDeniedCant))
+                .sorted(CounterService.getComparing())
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<IpInfoResponse> optional = a.stream()
@@ -40,10 +40,14 @@ public class CounterService {
                         , ArrayList::addAll);
     }
 
+    private static Comparator<RequestData> getComparing() {
+        return Comparator.comparingLong(RequestData::getDeniedCant).thenComparingLong(RequestData::getRequestedCant);
+    }
+
     public List<ComboInfoResponse> getCounterByCombo() {
         final List<RequestData> data = this.getData();
         return data.stream()
-                .sorted(Comparator.comparing(RequestData::getDeniedCant))
+                .sorted(CounterService.getComparing())
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<ComboInfoResponse> optional = a.stream()
@@ -62,7 +66,7 @@ public class CounterService {
     public List<PathInfoResponse> getCounterByPath() {
         final List<RequestData> data = this.getData();
         return data.stream()
-                .sorted(Comparator.comparing(RequestData::getDeniedCant))
+                .sorted(CounterService.getComparing())
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<PathInfoResponse> optional = a.stream()
@@ -81,7 +85,7 @@ public class CounterService {
     public List<UserAgentInfoResponse> getCounterByUserAgent() {
         final List<RequestData> data = this.getData();
         return data.stream()
-                .sorted(Comparator.comparing(RequestData::getDeniedCant))
+                .sorted(CounterService.getComparing())
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<UserAgentInfoResponse> optional = a.stream()
