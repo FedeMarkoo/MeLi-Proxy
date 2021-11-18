@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -41,8 +41,9 @@ class MetricsServiceTest {
     }
 
     @Test
-    void incrementMetricsDenied() {
+    void incrementMetricsDenied() throws InterruptedException {
         this.service.incrementMetrics("localhost", "/fakepath", "chrome", true);
-        //verify(this.mongoRepository, times(1)).incCounter(any(), anyBoolean());
+        Thread.sleep(1000);
+        verify(this.mongoRepository, times(1)).incCounter(any(), anyBoolean());
     }
 }

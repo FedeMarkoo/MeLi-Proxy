@@ -2,10 +2,7 @@ package com.meli.fede.markoo.proxy.manager.service;
 
 import com.meli.fede.markoo.proxy.manager.data.model.RequestData;
 import com.meli.fede.markoo.proxy.manager.data.repository.MongoRepository;
-import com.meli.fede.markoo.proxy.manager.response.ComboInfoResponse;
-import com.meli.fede.markoo.proxy.manager.response.IpInfoResponse;
-import com.meli.fede.markoo.proxy.manager.response.PathInfoResponse;
-import com.meli.fede.markoo.proxy.manager.response.UserAgentInfoResponse;
+import com.meli.fede.markoo.proxy.manager.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +18,13 @@ public class CounterService {
         return this.mongoRepository.getData();
     }
 
+    private static Comparator<BaseInfoResponse> getComparing() {
+        return Comparator.comparingLong(BaseInfoResponse::getDeniedCant).thenComparingLong(BaseInfoResponse::getRequestCant);
+    }
+
     public List<IpInfoResponse> getCounterByIp() {
         final List<RequestData> data = this.getData();
-        return data.stream()
-                .sorted(CounterService.getComparing())
+        final ArrayList<IpInfoResponse> collect = data.stream()
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<IpInfoResponse> optional = a.stream()
@@ -38,16 +38,13 @@ public class CounterService {
                             }
                         }
                         , ArrayList::addAll);
-    }
-
-    private static Comparator<RequestData> getComparing() {
-        return Comparator.comparingLong(RequestData::getDeniedCant).thenComparingLong(RequestData::getRequestedCant);
+        collect.sort(getComparing());
+        return collect;
     }
 
     public List<ComboInfoResponse> getCounterByCombo() {
         final List<RequestData> data = this.getData();
-        return data.stream()
-                .sorted(CounterService.getComparing())
+        final ArrayList<ComboInfoResponse> collect = data.stream()
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<ComboInfoResponse> optional = a.stream()
@@ -61,12 +58,13 @@ public class CounterService {
                             }
                         }
                         , ArrayList::addAll);
+        collect.sort(getComparing());
+        return collect;
     }
 
     public List<PathInfoResponse> getCounterByPath() {
         final List<RequestData> data = this.getData();
-        return data.stream()
-                .sorted(CounterService.getComparing())
+        final ArrayList<PathInfoResponse> collect = data.stream()
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<PathInfoResponse> optional = a.stream()
@@ -80,12 +78,13 @@ public class CounterService {
                             }
                         }
                         , ArrayList::addAll);
+        collect.sort(getComparing());
+        return collect;
     }
 
     public List<UserAgentInfoResponse> getCounterByUserAgent() {
         final List<RequestData> data = this.getData();
-        return data.stream()
-                .sorted(CounterService.getComparing())
+        final ArrayList<UserAgentInfoResponse> collect = data.stream()
                 .collect(ArrayList::new
                         , (a, d) -> {
                             final Optional<UserAgentInfoResponse> optional = a.stream()
@@ -99,5 +98,7 @@ public class CounterService {
                             }
                         }
                         , ArrayList::addAll);
+        collect.sort(getComparing());
+        return collect;
     }
 }

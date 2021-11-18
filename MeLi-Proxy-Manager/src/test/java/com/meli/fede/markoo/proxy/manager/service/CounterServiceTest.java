@@ -1,8 +1,10 @@
 package com.meli.fede.markoo.proxy.manager.service;
 
+import com.google.common.collect.Ordering;
 import com.meli.fede.markoo.proxy.manager.data.model.RequestData;
 import com.meli.fede.markoo.proxy.manager.data.repository.MongoRepository;
 import com.meli.fede.markoo.proxy.manager.generator.ObjectGenerator;
+import com.meli.fede.markoo.proxy.manager.response.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -13,8 +15,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Comparator;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ActiveProfiles("test")
@@ -37,23 +41,35 @@ class CounterServiceTest {
         when(this.repository.getData()).thenReturn(list);
     }
 
+    private static Comparator<BaseInfoResponse> getComparing() {
+        return Comparator.comparingLong(BaseInfoResponse::getDeniedCant).thenComparingLong(BaseInfoResponse::getRequestCant);
+    }
+
     @Test
     void getCounterByIp() {
-        this.service.getCounterByIp();
+        final List<IpInfoResponse> list = this.service.getCounterByIp();
+        assertTrue(Ordering.from(getComparing()).isOrdered(list));
     }
 
     @Test
     void getCounterByCombo() {
-        this.service.getCounterByCombo();
+        final List<ComboInfoResponse> list = this.service.getCounterByCombo();
+        assertTrue(Ordering.from(getComparing()).isOrdered(list));
+
     }
 
     @Test
     void getCounterByPath() {
-        this.service.getCounterByPath();
+        final List<PathInfoResponse> list = this.service.getCounterByPath();
+        assertTrue(Ordering.from(getComparing()).isOrdered(list));
+
     }
 
     @Test
     void getCounterByUserAgent() {
-        this.service.getCounterByUserAgent();
+        final List<UserAgentInfoResponse> list = this.service.getCounterByUserAgent();
+        assertTrue(Ordering.from(getComparing()).isOrdered(list));
+
     }
+
 }

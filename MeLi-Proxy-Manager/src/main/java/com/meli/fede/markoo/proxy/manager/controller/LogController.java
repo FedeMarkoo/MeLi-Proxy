@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/log")
@@ -16,12 +18,12 @@ public class LogController {
     private final LogService logService;
 
     @GetMapping("/ip/denied")
-    public ResponseEntity<Object> getIpsDenied() {
+    public ResponseEntity<Map<String, Long>> getIpsDenied() {
         return ResponseEntity.ok(this.logService.getIpsDenied());
     }
 
     @GetMapping("/path/denied")
-    public ResponseEntity<Object> getPathsDenied() {
+    public ResponseEntity<Map<String, Long>> getPathsDenied() {
         return ResponseEntity.ok(this.logService.getPathsDenied());
     }
 }

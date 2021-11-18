@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +25,7 @@ public class LogService {
         return this.repository.getData();
     }
 
-    public Object getIpsDenied() {
+    public Map<String, Long> getIpsDenied() {
         return this.getData().stream()
                 .filter(d -> d.getDeniedCant() > 0)
                 .sorted(LogService.getComparator())
@@ -34,7 +35,7 @@ public class LogService {
                         , Collectors.summingLong(RequestData::getDeniedCant)));
     }
 
-    public Object getPathsDenied() {
+    public Map<String, Long> getPathsDenied() {
         return this.getData().stream()
                 .filter(d -> d.getDeniedCant() > 0)
                 .sorted(LogService.getComparator())
