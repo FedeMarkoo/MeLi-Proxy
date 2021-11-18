@@ -33,14 +33,15 @@ public class RequestCantMaxScheduler {
         final Integer maxRequestPerCombo = accessManagerValues.getMaxRequestPerCombo();
         final Integer maxRequestPerUserAgent = accessManagerValues.getMaxRequestPerUserAgent();
 
-        this.value.setMaxRequestPerIp(RequestCantMaxScheduler.getNormalizedValue(maxRequestPerIp));
-        this.value.setMaxRequestPerPath(RequestCantMaxScheduler.getNormalizedValue(maxRequestPerPath));
-        this.value.setMaxRequestPerCombo(RequestCantMaxScheduler.getNormalizedValue(maxRequestPerCombo));
-        this.value.setMaxRequestPerUserAgent(RequestCantMaxScheduler.getNormalizedValue(maxRequestPerUserAgent));
+        this.value.setMaxRequestPerIp(this.getNormalizedValue(maxRequestPerIp, this.value.getMaxRequestPerIp()));
+        this.value.setMaxRequestPerPath(this.getNormalizedValue(maxRequestPerPath, this.value.getMaxRequestPerPath()));
+        this.value.setMaxRequestPerCombo(this.getNormalizedValue(maxRequestPerCombo, this.value.getMaxRequestPerCombo()));
+        this.value.setMaxRequestPerUserAgent(this.getNormalizedValue(maxRequestPerUserAgent, this.value.getMaxRequestPerUserAgent()));
     }
 
-    private static int getNormalizedValue(final Integer value) {
-        return value == null || value < 0 ? 0 : value;
+    private int getNormalizedValue(final Integer value, Integer actual) {
+        actual = actual == null ? this.defaultMax : actual;
+        return value == null || value < 0 ? actual : value;
     }
 }
 

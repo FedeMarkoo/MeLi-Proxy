@@ -21,7 +21,7 @@ spring:
       enabled: true
   cache:
     redis:
-      time-to-live: 5
+      time-to-live: 60
   data:
     mongodb:
       database: MeLi-Proxy
