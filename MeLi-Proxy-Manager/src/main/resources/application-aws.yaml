@@ -1,9 +1,9 @@
 spring:
   redis:
-    host: 10.0.1.11
+    host: 34.215.108.249
     port: 6379
   data:
     mongodb:
-      host: 10.0.1.11
+      host: 34.215.108.249
 server:
   port: 8080
